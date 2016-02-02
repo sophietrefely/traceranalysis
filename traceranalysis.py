@@ -36,8 +36,8 @@ for job_key in valid_jobs:
     averages_fname = '{0}_averages.csv'.format(job_key)
     data_fname = '{0}_data.csv'.format(job_key)
 
-    averages = list(csv.reader(open(averages_fname, "r"), delimiter="\t"))[0]
-    data = np.loadtxt(open(data_fname, "r"), delimiter="\t")
+    averages = list(csv.reader(open(averages_fname, "r"), delimiter=","))[0]
+    data = np.loadtxt(open(data_fname, "r"), delimiter=",")
 
     print('averages:', averages)
     print('data:', data)
