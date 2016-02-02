@@ -41,6 +41,9 @@ for job_key in valid_jobs:
     # Read in data file line by line
     data = []
     for line in open(data_fname):
+        # If the line is a whitespace error from excel ignore it
+        if line.isspace():
+            continue
         data_line = []
         for str_float in line.split(','):
             if not str_float.isspace():
