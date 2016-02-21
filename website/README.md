@@ -1,4 +1,5 @@
 Tasks for Tracer Analysis Project
+---------------------------------
 
  - [x] Fix placeholder formatting
  - [ ] Make paragraph font a little smaller
