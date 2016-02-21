@@ -1,6 +1,6 @@
 Tasks for Tracer Analysis Project
 
- - [ ] Fix placeholder formatting
+ - [x] Fix placeholder formatting
  - [ ] Make paragraph font a little smaller
  - [ ] Create 2 columns on page and add example images / textarea
  - [ ] Make it pretty

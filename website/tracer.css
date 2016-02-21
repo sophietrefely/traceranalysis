@@ -14,3 +14,7 @@ body {
 .averages p {
 	margin-bottom: 5px;
 }
+
+textarea {
+        padding: 6px;
+}
