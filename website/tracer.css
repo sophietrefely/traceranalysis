@@ -1,0 +1,16 @@
+body {
+	font-family: sans-serif;
+	padding: 20px;
+}
+
+.data {
+	margin-bottom: 10px;
+}
+
+.data p {
+	margin-bottom: 5px;
+}
+
+.averages p {
+	margin-bottom: 5px;
+}

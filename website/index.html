@@ -1,20 +1,22 @@
 <html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="tracer.css">
+	</head>
 	<body>
 		<h2>Tracer Analysis Tool</h2>
 
 		<form>
-
-			<div>
+			<div class="averages">
 				<p>Instructions for making the unlabeled data</p>
-				<textarea placeholder="Paste your CSV averages here as one row"></textarea>
+				<textarea rows="2" cols="50" placeholder="Paste your CSV averages here as one row"></textarea>
 			</div>
 
-			<div>
+			<div class="data">
 				<p>Enter the data here as one comma separated row</p>
-				<textarea placeholder="Paste your CSV data here as a matrix"></textarea>
+				<textarea rows="10" cols="50" placeholder="Paste your CSV data here as a matrix"></textarea>
 			</div>
 
-			<button type="submit">Compute Percentages</button>
+			<button class="compute" type="submit">Compute Percentages</button>
 		</form>
 	</body>
 </html>
