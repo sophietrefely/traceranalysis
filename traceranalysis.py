@@ -38,20 +38,22 @@ for job_key in valid_jobs:
 
     averages = list(csv.reader(open(averages_fname, "r"), delimiter=","))[0]
 
-    # Read in data file line by line
+# Read in data file line by line
     data = []
     for line in open(data_fname):
+        strip_line = line.rstrip(',')
         # If the line is a whitespace error from excel ignore it
-        if line.isspace():
+        if strip_line.isspace():
             continue
         data_line = []
-        for str_float in line.split(','):
+        for str_float in strip_line.split(','):
             if not str_float.isspace():
                 data_line.append(float(str_float))
         data.append(data_line)
     data = np.array(data)
 
     # Old way - had issues with whitespace
+    #NOTE: Needed to deal with trailing commas by stripping line above
     #data = np.loadtxt(open(data_fname, "r"), delimiter=",")
 
     print('averages:', averages)
