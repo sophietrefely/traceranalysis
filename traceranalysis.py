@@ -6,6 +6,12 @@ import csv
 import numpy as np
 import os
 
+from tracerutils import (
+    do_tracer_analysis,
+    prepare_data_for_analysis,
+    prepare_unlabeled_for_analysis
+)
+    
 # 1) Read all files in and identify keys e.g.
 #    if there are files like:
 #      [set-a_unlabeled, set-b_unlabeled, set-a_data, set-b_data]
@@ -36,58 +42,21 @@ for job_key in valid_jobs:
     unlabeled_fname = '{0}_unlabeled.csv'.format(job_key)
     data_fname = '{0}_data.csv'.format(job_key)
 
-    unlabeled = np.array(
-        list(csv.reader(open(unlabeled_fname, "r"), delimiter=",")),
-    ).astype(np.float)
-    print('unlabeled:', unlabeled)
-    averages = np.average(unlabeled, axis=0).tolist() #average the unlabeled data by column
-    
-    # Read in data file line by line
-    data = []
-    for line in open(data_fname):
-        # If the line is a whitespace error from excel ignore it
-        if line.isspace():
-            continue
-        #strip line to deal with trailing commas
-        strip_line = line.rstrip(',')
-        
-        data_line = []
-        for str_float in strip_line.split(','):
-            if not str_float.isspace():
-                data_line.append(float(str_float))
-        data.append(data_line)
-    data = np.array(data)
+    # Call function from tracerutils to prepare unlabeled data from CSV (or web)
+    # Cleans up trailing commas, non numbers, etc
+    text_from_unlabeled_file = open(unlabeled_fname).read()
+    unlabeled = prepare_unlabeled_for_analysis(text_from_unlabeled_file)
 
-    # Old way - had issues with whitespace
-    #data = np.loadtxt(open(data_fname, "r"), delimiter=",")
+    # Call function from tracerutils to prepare data from CSV (or web)
+    # for analysis. Needs to strip trailing commas, fix non numbers etc.
+    text_from_data_file = open(data_fname).read()    
+    data = prepare_data_for_analysis(text_from_data_file)
 
     #print('averages:', averages)
     print('data:', data)
 
-    diagonal_matrix = []
-    num_rows = len(averages)
-    # Make a copy of everything in averages in new list
-    # Add zeros at the front to make values sit on diagonal
-    # Slice the end to make it square
-    for row_number in range(num_rows):
-        averages_copy = list(averages)
-        averages_zeros  = [0] * row_number + averages_copy
-        averages_sliced = averages_zeros[:num_rows]
-        diagonal_matrix.append(averages_sliced)
-
-    diagonal_matrix = np.array(diagonal_matrix)
-    print(diagonal_matrix)
-
-    inverse = np.linalg.inv(diagonal_matrix)
-    result = np.dot(data, inverse)
-
-    # Numpy vector where <n>th element is the sum of row <n>
-    data_rows = len(data)
-    print(data_rows)
-    row_sums = np.sum(result, axis=1)
-    for row_number in range(data_rows):
-        result[row_number, :] *= 100/row_sums[row_number]
-
+    result = do_tracer_analysis(data, unlabeled)
+    
     # print to a file
     output_fname = '{0}_output.csv'.format(job_key)
     np.savetxt(output_fname, result, fmt='%.1f', delimiter=',')
