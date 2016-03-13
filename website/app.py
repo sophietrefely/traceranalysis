@@ -25,10 +25,10 @@ def tracer():
     # TODO don't fix newline escaping like this!!!
     
     the_data = prepare_data_for_analysis(
-        request.form['data'].replace('\\n', '\n')
+        request.form['labeledData'].replace('\\n', '\n')
     )
     the_unlabeled_data = prepare_unlabeled_for_analysis(
-        request.form['unlabeled'].replace('\\n', '\n')
+        request.form['unlabeledData'].replace('\\n', '\n')
     )
     
     # TODO is calling list here really necessary
