@@ -41,10 +41,12 @@ for job_key in valid_jobs:
 # Read in data file line by line
     data = []
     for line in open(data_fname):
-        strip_line = line.rstrip(',')
         # If the line is a whitespace error from excel ignore it
-        if strip_line.isspace():
+        if line.isspace():
             continue
+        #strip line to deal with trailing commas
+        strip_line = line.rstrip(',')
+        
         data_line = []
         for str_float in strip_line.split(','):
             if not str_float.isspace():
@@ -53,7 +55,6 @@ for job_key in valid_jobs:
     data = np.array(data)
 
     # Old way - had issues with whitespace
-    #NOTE: Needed to deal with trailing commas by stripping line above
     #data = np.loadtxt(open(data_fname, "r"), delimiter=",")
 
     print('averages:', averages)
@@ -62,7 +63,7 @@ for job_key in valid_jobs:
     # Remove potential accidental " " in data and convert to float
     float_averages = []
     for number in averages:
-        if not number.isspace():
+        if not number.isspace() and not number == '':
             float_number = float(number)
             float_averages.append(float_number)
     print('averages:', float_averages)
