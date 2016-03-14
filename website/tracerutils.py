@@ -18,14 +18,12 @@ def do_tracer_analysis(data, unlabeled):
         diagonal_matrix.append(averages_sliced)
 
     diagonal_matrix = np.array(diagonal_matrix)
-    print(diagonal_matrix)
 
     inverse = np.linalg.inv(diagonal_matrix)
     SUPERMAN = np.dot(data, inverse)
 
     # Numpy vector where <n>th element is the sum of row <n>
     data_rows = len(data)
-    print(data_rows)
     row_sums = np.sum(SUPERMAN, axis=1)
     for row_number in range(data_rows):
         SUPERMAN[row_number, :] *= 100/row_sums[row_number]
@@ -38,18 +36,21 @@ def do_tracer_analysis(data, unlabeled):
 def prepare_data_for_analysis(all_data_input):
     # Read in data file line by line
     data = []
-    for line in all_data_input.split('\n'):
+    for line in all_data_input.strip('\n').split('\n'):
         # If the line is a whitespace error from excel ignore it
         if line.isspace():
             continue
         #strip line to deal with trailing commas
-        strip_line = line.rstrip(',')
+        strip_line = line.strip('\t')
         
         data_line = []
-        for str_float in strip_line.split(','):
+        for str_float in strip_line.split('\t'):
             if not str_float.isspace():
                 data_line.append(float(str_float))
         data.append(data_line)
+    print('===================')
+    print(data)
+    print('===================')
     data = np.array(data)
     return data
 
@@ -58,11 +59,10 @@ def prepare_data_for_analysis(all_data_input):
 ### DEFINE PREPARE_UNLABELED_FOR_ANALYSIS
 
 def prepare_unlabeled_for_analysis(user_unlabeled_data):
-    lines = user_unlabeled_data.split('\n')
+    lines = user_unlabeled_data.strip('\n').split('\n')
     stripped_lines = []
     for line in lines:
-        stripped_lines.append(line.strip(',').split(','))
-    print('stripped_lines:', stripped_lines)
+        stripped_lines.append(line.strip('\t').split('\t'))
 
     unlabeled = np.array(stripped_lines).astype(np.float)
     return unlabeled
