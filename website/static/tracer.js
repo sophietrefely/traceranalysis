@@ -3,15 +3,15 @@ $(document).ready(function() {
 
     function doTracerAnalysis(labeled, unlabeled) {
         formData = $('#tracerForm').serialize()
-        $.post('/api/tracer', formData).then(function(a, b, c) {
-            console.log('did request:', a, b, c);
+        $.post('/api/tracer', formData).then(function(data) {
+            var arrays = JSON.parse(data);
+            var lines = []
+            arrays.forEach(function(row) {
+                lines.push(row.join('\t'));
+            });
+            $('#results').val(lines.join('\n'));
         });
     }
- 
-    function onClickComputePercentages() {
-
-    } 
     
     $('#computePercentages').click(doTracerAnalysis);
-
 });
