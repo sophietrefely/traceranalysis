@@ -58,9 +58,13 @@ def prepare_data_for_analysis(all_data_input):
 ### DEFINE PREPARE_UNLABELED_FOR_ANALYSIS
 
 def prepare_unlabeled_for_analysis(user_unlabeled_data):
-    unlabeled = np.array(
-        list(csv.reader(user_unlabeled_data.split('\n'), delimiter=",")),
-    ).astype(np.float)
+    lines = user_unlabeled_data.split('\n')
+    stripped_lines = []
+    for line in lines:
+        stripped_lines.append(line.strip(',').split(','))
+    print('stripped_lines:', stripped_lines)
+
+    unlabeled = np.array(stripped_lines).astype(np.float)
     return unlabeled
 
 ### ENDDEFINE PREPARE_UNLABELED_FOR_ANALYSIS

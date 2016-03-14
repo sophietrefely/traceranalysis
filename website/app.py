@@ -12,23 +12,19 @@ from tracerutils import (
     prepare_unlabeled_for_analysis
 )
     
-@app.route('/')
+@app.route('/api/ping')
 def hello_world():
-    return 'Hello World!'
+    return '{"ping": "OK"}'
 
-@app.route('/sup')
-def some_json():
-    return json.dumps({'sup': 'lol'})
-
-@app.route('/tracer', methods=['POST'])
+@app.route('/api/tracer', methods=['POST'])
 def tracer():
     # TODO don't fix newline escaping like this!!!
     
     the_data = prepare_data_for_analysis(
-        request.form['labeledData'].replace('\\n', '\n')
+        request.form['labeledData'].replace('\\n', '\n').replace('\r', '')
     )
     the_unlabeled_data = prepare_unlabeled_for_analysis(
-        request.form['unlabeledData'].replace('\\n', '\n')
+        request.form['unlabeledData'].replace('\\n', '\n').replace('\r', '')
     )
     
     # TODO is calling list here really necessary
