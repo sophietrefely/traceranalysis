@@ -72,7 +72,6 @@ def prepare_unlabeled_for_analysis(user_unlabeled_data):
     return unlabeled
 
 ### ENDDEFINE PREPARE_UNLABELED_FOR_ANALYSIS
->>>>>>> Put functions from utils into top of script
     
 # 1) Read all files in and identify keys e.g.
 #    if there are files like:
