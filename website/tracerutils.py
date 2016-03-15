@@ -1,9 +1,19 @@
 import csv
 import numpy as np
+import pprint
 
 ### DEFINE DO_TRACER_ANALYSIS
 
 def do_tracer_analysis(data, unlabeled):
+    file = open('input_data.txt', 'w')
+    writer = csv.writer(file)
+    writer.writerows(data)
+    file.close()
+
+    file = open('input_unlabeled.txt', 'w')
+    writer = csv.writer(file)
+    writer.writerows(unlabeled)
+    file.close()
     averages = np.average(unlabeled, axis=0).tolist() #average the unlabeled data by column
 
     diagonal_matrix = []
@@ -20,14 +30,18 @@ def do_tracer_analysis(data, unlabeled):
     diagonal_matrix = np.array(diagonal_matrix)
 
     inverse = np.linalg.inv(diagonal_matrix)
-    SUPERMAN = np.dot(data, inverse)
+    result = np.dot(data, inverse)
 
     # Numpy vector where <n>th element is the sum of row <n>
     data_rows = len(data)
-    row_sums = np.sum(SUPERMAN, axis=1)
+    row_sums = np.sum(result, axis=1)
     for row_number in range(data_rows):
-        SUPERMAN[row_number, :] *= 100/row_sums[row_number]
-    return SUPERMAN
+        result[row_number, :] *= 100/row_sums[row_number]
+
+    # Eliminate NaNs which are the result of bad data (all zeros in a row)
+    result = np.nan_to_num(result)
+
+    return result
 
 ### ENDDEFINE DO_TRACER_ANALYSIS
 
