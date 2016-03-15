@@ -5,15 +5,6 @@ import pprint
 ### DEFINE DO_TRACER_ANALYSIS
 
 def do_tracer_analysis(data, unlabeled):
-    file = open('input_data.txt', 'w')
-    writer = csv.writer(file)
-    writer.writerows(data)
-    file.close()
-
-    file = open('input_unlabeled.txt', 'w')
-    writer = csv.writer(file)
-    writer.writerows(unlabeled)
-    file.close()
     averages = np.average(unlabeled, axis=0).tolist() #average the unlabeled data by column
 
     diagonal_matrix = []
