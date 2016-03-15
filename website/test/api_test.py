@@ -33,9 +33,9 @@ TEST_DATA_FNAME = 'test_data.tsv'
 TEST_UNLABELED_FNAME = 'test_unlabeled.tsv'
 TEST_OUTPUT_FNAME = 'test_output.tsv'
 
-data = open(os.path.join(test_case, TEST_DATA_FNAME)).read()
-unlabeled = open(os.path.join(test_case, TEST_UNLABELED_FNAME)).read()
-expected = open(os.path.join(test_case, TEST_OUTPUT_FNAME)).read()
+data = open(os.path.join(test_case, TEST_DATA_FNAME), 'rU').read()
+unlabeled = open(os.path.join(test_case, TEST_UNLABELED_FNAME), 'rU').read()
+expected = open(os.path.join(test_case, TEST_OUTPUT_FNAME), 'rU').read()
 
 r = requests.post('http://localhost:5000/api/tracer', {
 	"unlabeledData": unlabeled,
@@ -43,6 +43,5 @@ r = requests.post('http://localhost:5000/api/tracer', {
 })
 
 result = str(r.json())
-#result_str = '\n'.join(['\t'.join([str(f) for f in o]) for o in result])
 
-assert result_str == expected
+assert result.strip() == expected.strip()
