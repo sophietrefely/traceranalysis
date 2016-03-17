@@ -1,6 +1,19 @@
 body {
 	font-family: sans-serif;
 	padding: 20px;
+    max-width: 530px;
+}
+
+p {
+    font-size: 12px;
+}
+
+ul li {
+    font-size: 12px;
+}
+
+ul {
+    padding-left: 30px;
 }
 
 .data {

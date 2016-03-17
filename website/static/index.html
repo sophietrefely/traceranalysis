@@ -1,45 +1,65 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="tracer.css">
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-75225835-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
   </head>
   <body>
     <h2>Tracer Analysis Tool</h2>
 
     <form id="tracerForm" method="post">
       <div class="averages">
-        <p>Data from tracer experiments using isotope labeled metabolites (eg 13C glucose) must be normalized to natural isotopologue distribution. This tool will quickly and reliably transform raw mass spec AUC values into the percent representation of each isotopologue measured.<p>
+        <p>Data from tracer experiments using isotope labeled metabolites (eg <sup>13</sup>C glucose) must be normalized to natural isotopologue distribution. This tool will quickly and reliably transform raw mass spec AUC values into the percent representation of each isotopologue measured.<p>
 
-        <h3> 1. Enter unlabeled data:</h3>
+        <h4> 1. Enter unlabeled data</h4>
 
         <p>Copy and paste from your spreadsheet.
 
-        <p>NOTE: Data should be entered as tab separated values with each row on a new line. Paste in NUMERICAL VALUES ONLY. Do not paste in the column and row headers.<p>
+        <ul>
+            <li>Data should be entered as tab-separated values with each row on a new line.</li>
+            <li>Paste in NUMERICAL VALUES ONLY.</li>
+            <li>Do not paste in the column and row headers.</li>
+        </ul>
 
-        <textarea name="unlabeledData" id="unlabeledData" rows="2" cols="110" placeholder="Paste your unlabeled data here as comma seperated values"></textarea>
+        <textarea name="unlabeledData" id="unlabeledData" rows="2" cols="110" placeholder="Paste your unlabeled data here as tab-separated values"></textarea>
       </div>
 
-        <h3>2. Enter your full data set:</h3>
+        <h4>2. Enter your full data set</h4>
          
 
       <div class="data">
-        <p>Paste the data for your chosen metabolite into the box below. Use the same format as you did for the unlabeled data and make sure the number of columns is consistent.</p>
-        <textarea name="labeledData" id="labeledData" rows="10" cols="110" placeholder="Paste your CSV data here as a matrix"></textarea>
+        <p>Paste the data for your chosen metabolite into the box below.</p>
+        <ul>
+            <li>Use the same format as you did for unlabeled data</li>
+            <li>Make sure the number of columns is consistent with the unlabeled data</li>
+        </ul>
+
+        <textarea name="labeledData" id="labeledData" rows="10" cols="110" placeholder="Paste your tab-separated data here as a matrix"></textarea>
       </div>
 
     </form>
 
-  <button id="computePercentages" class="compute">Compute Percentages</button>
 
-	<h3>3. Your results</h3>
-        <textarea name="results" id="results" rows="10" cols="110" placeholder="Waiting for a calculation"></textarea>
+    <h4>3. Compute results</h4>
+      <p>Click the button to compute the results.</p>
+      <p><button id="computePercentages" class="compute">Compute Percentages</button></p>
+        <textarea name="results" id="results" rows="10" cols="110" placeholder="Your results will appear here"></textarea>
+
+     <h4>Important notes on data formatting</h4>
+     <p>Data should be organised into separate columns for each isotopologue measured and separate rows for each replicate sample.</p>
+
+  <p>The unlabeled data is used for normalisation. It is recommended that you normalise to control data from samples that did not contain an isotope label. If you do not have unlabeled data, you can use theoretical isotopologue distribution values for normalisation. These values can be derived for specific metabolites using software tools such as XcaliburQuan (Thermo) or .... <p>
 
   </body>
 
   <script   src="https://code.jquery.com/jquery-2.2.1.js"   integrity="sha256-eNcUzO3jsv0XlJLveFEkbB8bA7/CroNpNVk3XpmnwHc="   crossorigin="anonymous"></script>
   <script type="text/javascript" src="tracer.js"></script>
-
-  <strong>Data formatting:</strong>
-     <p>Data should be organised into separate columns for each isotopologue measured and separate rows for each replicate sample.</p>
-
-  <p>Enter the unlabeled data for your chosen metabolite in the box below. This data is used for normalisation. It is recommended that you normalise to control data from samples that did not contain an isotope label. If you do not have unlabeled data, you can use theoretical isotopologue distribution values for normalisation. These values can be derived for specific metabolites using software tools such as XcaliburQuan (Thermo) or .... <p>
 </html>
