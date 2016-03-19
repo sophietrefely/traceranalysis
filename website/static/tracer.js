@@ -3,9 +3,10 @@ $(document).ready(function() {
         alert('Something went wrong! Contact s.trefely@gmail.com with the data you tried to use.');
     }
 
+    // TODO also pass the column in here, not computed correctly ATM
     function knownBadData(where) {
-        message = 'Your data seems to be malformed at row: ' + where.row + ' column: ', where.column + '. ' +
-                  'Please check for trailing tabs or lines, and that each row and column is consistent';
+        message = 'Your data is not consistent! Check row: ' + where.row + '. ' +
+                  'Look for trailing tabs or lines and make sure each row and column is the same length';
         alert(message);
     }
 
