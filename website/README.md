@@ -1,7 +1,7 @@
- - [ ] Fix word wrap in text area
+ - [x] Increase number of columns in textarea
  - [ ] Give feedback on number of rows and columns in javascript
  - [ ] Specify precision in output using form field
  - [ ] GIF / Screencast to show how to use
  - [ ] Tidy up whitespace and headers
  - [ ] Spinner for 'calculate percentages'
- - [x] Increase number of columns in textarea
+ - [ ] Fix word wrap in text area
