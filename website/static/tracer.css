@@ -1,7 +1,7 @@
 body {
 	font-family: sans-serif;
 	padding: 20px;
-    max-width: 530px;
+    max-width: 550px;
 }
 
 p {
@@ -26,6 +26,10 @@ ul {
 
 .averages p {
 	margin-bottom: 5px;
+}
+
+p.size-field {
+    font-weight: bold;
 }
 
 textarea {
