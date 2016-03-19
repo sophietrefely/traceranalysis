@@ -1,4 +1,5 @@
  - [x] Increase number of columns in textarea
+ - [ ] Fix usability issues with copy paste and size of data
  - [ ] Give feedback on number of rows and columns in javascript
  - [ ] Specify precision in output using form field
  - [ ] GIF / Screencast to show how to use

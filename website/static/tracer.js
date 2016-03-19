@@ -70,23 +70,43 @@ $(document).ready(function() {
         };
     }
 
+    function formatSizeStr(size) {
+        return 'Data is ' + size.columns + ' columns by ' + size.rows + ' rows ';
+    }
+
     function getMetadataForUnlabeled(e) {
         var input = e.originalEvent.clipboardData.getData('Text');
         console.log('compute metadata for:', input);
-        console.log('size of data:', findRowsAndColumns(input));
+        size = findRowsAndColumns(input);
 
+        var sizeStr = formatSizeStr(size);
+        $('#unlabeledDataSize').text(sizeStr);
     }
 
     function getMetadataForLabeled(e) {
         var input = e.originalEvent.clipboardData.getData('Text');
         console.log('compute metadata for:', input);
-        console.log('size of data:', findRowsAndColumns(input));
+        size = findRowsAndColumns(input);
+
+        var sizeStr = formatSizeStr(size);
+        $('#labeledDataSize').text(sizeStr);
     }
 
+    function checkCleared() {
+        // If either of the boxes are empty, then remove the message
+        var unlabeledData = $('#unlabeledData').val();
+        if (unlabeledData.trim() === '') {
+            $('#unlabeledDataSize').empty();
+        }
 
+        var labeledData = $('#labeledData').val();
+        if (labeledData.trim() === '') {
+            $('#labeledDataSize').empty();
+        }
+    }
 
     $('#computePercentages').click(doTracerAnalysis);
 
     $('#unlabeledData').on('paste', getMetadataForUnlabeled);
-    $('#labeledData').on('paste', getMetadataForLabeled)
+    $('#labeledData').on('paste', getMetadataForLabeled);
 });
