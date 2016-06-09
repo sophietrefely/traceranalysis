@@ -1,6 +1,6 @@
 $(document).ready(function() {
     function showAlert() {
-        alert('Something went wrong! Contact s.trefely@gmail.com with the data you tried to use.');
+        alert('Something went wrong! Check your data. If you cannot fix the problem contact sjt65+fluxfix@drexel.edu with the data you tried to use.');
     }
 
     // TODO also pass the column in here, not computed correctly ATM
