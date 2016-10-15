@@ -1,6 +1,14 @@
 $(document).ready(function() {
+    var cachedLabeled = null;
+    var cachedUnlabeled = null;
+
     function showAlert() {
         alert('Something went wrong! Check your data. If you cannot fix the problem contact sjt65+fluxfix@drexel.edu with the data you tried to use.');
+    }
+
+    // google 'check number javascript'
+    function isNumber(n) {
+          return (Object.prototype.toString.call(n) === '[object Number]' || Object.prototype.toString.call(n) === '[object String]') &&!isNaN(parseFloat(n)) && isFinite(n.toString().replace(/^-/, ''));
     }
 
     // TODO also pass the column in here, not computed correctly ATM
@@ -8,6 +16,24 @@ $(document).ready(function() {
         message = 'Your data is not consistent! Check row: ' + where.row + '. ' +
                   'Look for trailing tabs or lines and make sure each row and column is the same length';
         alert(message);
+    }
+
+    function alertNonNumericData(where) {
+        message = 'Your data contains non-numeric characters. Check that you did ' +
+                  'not include any row or column header text at row ' + where.row + ', col ' + where.column;
+        alert(message)
+    }
+
+    function cleanPastedData(data) {
+        // First, remove any trailling or preceding newlines
+        var data = data.trim();
+
+        // Replace \r with \n in case that is an issue
+        // Fuck you microsoft
+        data = data.replace(/\r\n/g, '\n');
+        data = data.replace(/\r/g, '\n');
+
+        return data;
     }
 
     function doTracerAnalysis(labeled, unlabeled) {
@@ -31,13 +57,6 @@ $(document).ready(function() {
 
     function findRowsAndColumns(data) {
         console.log('raw data:', data);
-        // First, remove any trailling or preceding newlines
-        var data = data.trim();
-
-        // Replace \r with \n in case that is an issue
-        // Fuck you microsoft
-        data = data.replace(/\r\n/g, '\n');
-        data = data.replace(/\r/g, '\n');
 
         // Split by newline to count number of rows
         var rows = data.split('\n');
@@ -51,6 +70,33 @@ $(document).ready(function() {
             var rowSplit = row.split('\t');
             var length = rowSplit.length;
 
+            for (var colIndex = 0; colIndex < rowSplit.length; colIndex++) {
+                var elem = rowSplit[colIndex];
+                if (!isNumber(elem.trim())) {
+                    var where = {
+                        row: index + 1,
+                        column: colIndex + 1
+                    }
+                    alertNonNumericData(where);
+                    return {
+                        rows: 0, columns: 0 
+                    };
+                    //throw 'Failed to parse data (non-numeric)';
+                }
+            }
+            /*
+            rowSplit.forEach(function(elem, colIndex) {
+                if (elem.match(/[a-z]/i)) {
+                    var where = {
+                        row: index + 1,
+                        column: colIndex + 1
+                    }
+                    alertNonNumericData(where);
+                    throw 'Failed to parse data (non-numeric)';
+                }
+            })
+            */
+
             // If numberOfColumns is defined, we have already seen a row length
             // Check it is the same as the one before with compound if statement
             if (numberOfColumns && numberOfColumns !== length) {
@@ -59,6 +105,7 @@ $(document).ready(function() {
                     column: length + 1
                 };
                 knownBadData(where);
+                throw 'Failed to parse data (imbalanced structure)';
             }
 
             // Assign to numberOfColumns so we can check consistency as we go
@@ -76,7 +123,15 @@ $(document).ready(function() {
     }
 
     function getMetadataForUnlabeled(e) {
-        var input = e.originalEvent.clipboardData.getData('Text');
+        var input = cleanPastedData(e.originalEvent.clipboardData.getData('Text'));
+
+        var unchanged = cachedUnlabeled && cachedUnlabeled === input;
+        cachedUnlabeled = input;
+        if (unchanged) {
+            console.log('data unchanged');
+            return;
+        }
+
         console.log('compute metadata for:', input);
         size = findRowsAndColumns(input);
 
@@ -85,13 +140,66 @@ $(document).ready(function() {
     }
 
     function getMetadataForLabeled(e) {
-        var input = e.originalEvent.clipboardData.getData('Text');
+        var input = cleanPastedData(e.originalEvent.clipboardData.getData('Text'));
+
+        var unchanged = cachedLabeled && cachedLabeled === input;
+        cachedLabeled = input;
+        if (unchanged) {
+            console.log('data unchanged');
+            return;
+        }
+ 
         console.log('compute metadata for:', input);
         size = findRowsAndColumns(input);
 
         var sizeStr = formatSizeStr(size);
         $('#labeledDataSize').text(sizeStr);
     }
+
+    function getTextareaValueFromUnlabeled() {
+        var input = cleanPastedData($('#unlabeledData').val());
+
+        var unchanged = cachedUnlabeled && cachedUnlabeled === input;
+        cachedUnlabeled = input;
+        if (unchanged) {
+            console.log('data unchanged');
+            return;
+        }
+
+        // Check input is not null
+        if (!input || input.length === 0) {
+            // do nothing
+            return;
+        }
+
+        console.log('compute metadata for:', input);
+        size = findRowsAndColumns(input);
+
+        var sizeStr = formatSizeStr(size);
+        $('#unlabeledDataSize').text(sizeStr);
+    }
+
+    function getTextareaValueFromLabeled() {
+        var input = cleanPastedData($('#labeledData').val());
+
+        var unchanged = cachedLabeled && cachedLabeled === input;
+        cachedLabeled = input;
+        if (unchanged) {
+            console.log('data unchanged');
+            return;
+        }
+
+        if (!input || input.length === 0) {
+            // do nothing
+            return;
+        }
+        console.log('compute metadata for:', input);
+        size = findRowsAndColumns(input);
+
+        var sizeStr = formatSizeStr(size);
+        $('#labeledDataSize').text(sizeStr);
+    }
+
 
     function checkCleared() {
         // If either of the boxes are empty, then remove the message
@@ -109,5 +217,8 @@ $(document).ready(function() {
     $('#computePercentages').click(doTracerAnalysis);
 
     $('#unlabeledData').on('paste', getMetadataForUnlabeled);
+    $('#unlabeledData').on('blur', getTextareaValueFromUnlabeled);
+    
     $('#labeledData').on('paste', getMetadataForLabeled);
+    $('#labeledData').on('blur', getTextareaValueFromLabeled);
 });
