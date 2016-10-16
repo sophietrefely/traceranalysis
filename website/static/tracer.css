@@ -32,6 +32,11 @@ p.size-field {
     font-weight: bold;
 }
 
+.version {
+    font-size: 14px;
+    color: #999999;
+}
+
 textarea {
         padding: 6px;
         font-size: 10px;
