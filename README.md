@@ -1,7 +1,10 @@
 # Traceranalysis (FluxFix)
 
+## About
+Read [this](https://github.com/sophietrefely/traceranalysis/blob/master/How%20to%20use%20tracernalysis.docx) for detailed info.
+
 ## Web based tool
-See [our website](http://www.fluxfix.science) for the web-based tool, and a description of what it does.
+See [our website](http://www.fluxfix.science) for the web-based tool, and information about what it does.
 
 ## Batch processing
 If you are interested in batch processing, the following steps are what you need
