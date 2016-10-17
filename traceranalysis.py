@@ -26,18 +26,18 @@ def do_tracer_analysis(data, unlabeled):
         diagonal_matrix.append(averages_sliced)
 
     diagonal_matrix = np.array(diagonal_matrix)
-    print(diagonal_matrix)
+    #print(diagonal_matrix)
 
     inverse = np.linalg.inv(diagonal_matrix)
-    SUPERMAN = np.dot(data, inverse)
+    normalised = np.dot(data, inverse)
 
     # Numpy vector where <n>th element is the sum of row <n>
     data_rows = len(data)
-    print(data_rows)
-    row_sums = np.sum(SUPERMAN, axis=1)
+    #print(data_rows)
+    row_sums = np.sum(normalised, axis=1)
     for row_number in range(data_rows):
-        SUPERMAN[row_number, :] *= 100/row_sums[row_number]
-    return SUPERMAN
+        normalised[row_number, :] *= 100/row_sums[row_number]
+    return normalised 
 
 ### ENDDEFINE DO_TRACER_ANALYSIS
 

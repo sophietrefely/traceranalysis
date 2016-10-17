@@ -1,7 +1,7 @@
 from io import StringIO
 import numpy as np
 
-from traceranalysis import traceranalysis
+from traceranalysis import do_tracer_analysis 
 
 # Create text stream as though we loaded files
 # of unlabeled, and labeled data
@@ -26,7 +26,7 @@ print('unlabeled shape:', unlabeled_as_numpy_array.shape)
 print('labeled shape:', labeled_as_numpy_array.shape)
 
 # Use our library to get the result
-result = traceranalysis.do_tracer_analysis(
+result = do_tracer_analysis(
     labeled_as_numpy_array, unlabeled_as_numpy_array
 )
 
