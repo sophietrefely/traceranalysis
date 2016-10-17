@@ -16,6 +16,10 @@ ul {
     padding-left: 30px;
 }
 
+h4 {
+    margin-bottom: 0;
+}
+
 .data {
 	margin-bottom: 10px;
 }
