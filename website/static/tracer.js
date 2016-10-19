@@ -36,7 +36,11 @@ $(document).ready(function() {
         return data;
     }
 
-    function doTracerAnalysis(labeled, unlabeled) {
+    function onClickComputePercentages(e) {
+        doTracerAnalysis();
+    }
+
+    function doTracerAnalysis(callback) {
         formData = $('#tracerForm').serialize()
         $.post('/api/tracer', formData).done(function(data) {
             try {
@@ -45,14 +49,35 @@ $(document).ready(function() {
                 arrays.forEach(function(row) {
                     lines.push(row.join('\t'));
                 });
-                $('#results').val(lines.join('\n'));
+
+                var result = lines.join('\n');
+                $('#results').val(result);
+                if (callback) {
+                    callback(lines.join(result));
+                }
             }
             catch (err) {
+                console.log('Got error:', err)
                 showAlert();
             }
         }).fail(function() {
             showAlert();
         });
+    }
+
+    function downloadResultTsv() {
+        function cb(results) {
+            var downloadLink = document.createElement("a");
+            downloadLink.style.width = 0;
+            var blob = new Blob([results]);
+            var url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            downloadLink.download = "result.tsv";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+        doTracerAnalysis(cb);
     }
 
     function findRowsAndColumns(data) {
@@ -214,11 +239,42 @@ $(document).ready(function() {
         }
     }
 
-    $('#computePercentages').click(doTracerAnalysis);
+    function uploadUnlabeledTsv(e) {
+        var file = document.getElementById('unlabeledTsv').files[0];
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            text = e.target.result;
+            $('#unlabeledData').val(text);
+            // Hack to trigger checking of data (as though edited)
+            $('#unlabeledData').trigger('blur');
+        };
+        reader.readAsText(file);
+    }
+
+    function uploadLabeledTsv(e) {
+        var file = document.getElementById('labeledTsv').files[0];
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            text = e.target.result;
+            $('#labeledData').val(text);
+            // Hack to trigger checking of data (as though edited)
+            $('#labeledData').trigger('blur');
+        };
+        reader.readAsText(file);
+    }
+
+    $('#computePercentages').click(onClickComputePercentages);
 
     $('#unlabeledData').on('paste', getMetadataForUnlabeled);
     $('#unlabeledData').on('blur', getTextareaValueFromUnlabeled);
     
     $('#labeledData').on('paste', getMetadataForLabeled);
     $('#labeledData').on('blur', getTextareaValueFromLabeled);
+
+    $('#downloadTsv').on('click', downloadResultTsv);
+
+    $('#labeledTsv').on('change', uploadLabeledTsv);
+    $('#unlabeledTsv').on('change', uploadUnlabeledTsv);
 });

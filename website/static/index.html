@@ -22,7 +22,7 @@
         
         <p><strong>Interested in batch processing?</strong> See the instructions in the <a href="https://github.com/sophietrefely/traceranalysis">github readme</a></p>
 
-        <h4> 1. Enter unlabeled data</h4>
+        <h4> 1. Enter unlabeled data (or upload file)</h4>
 
         <p>Copy unlabeled data for your chosen metabolite from your spreadsheet and paste into the box below.<p>
 
@@ -31,11 +31,12 @@
             <li>Paste in NUMERICAL VALUES ONLY.</li>
             <li>Do not paste in the column and row headers.</li>
         </ul>
-         <p class="size-field" id="unlabeledDataSize"></p>
-        <textarea name="unlabeledData" id="unlabeledData" rows="10" cols="110" placeholder="Paste your unlabeled data here as tab-separated values"></textarea>
+         <p class="size-field" id="unlabeledDataSize">Waiting for data...</p>
+        <textarea name="unlabeledData" id="unlabeledData" rows="10" cols="110" placeholder="Type, paste, or upload your unlabeled data here as tab-separated values"></textarea>
+        <input type="file" name="unlabeledTsv" id="unlabeledTsv" value="Upload unlabeled TSV">
       </div>
 
-        <h4>2. Enter your full data set</h4>
+        <h4>2. Enter your full data set (or upload file)</h4>
          
 
       <div class="data">
@@ -44,8 +45,10 @@
             <li>Use the same format as you did for unlabeled data</li>
             <li>Make sure the number of columns is consistent with the unlabeled data</li>
         </ul>
-        <p class="size-field" id="labeledDataSize"></p>
-        <textarea name="labeledData" id="labeledData" rows="10" cols="110" placeholder="Paste your tab-separated data here as a matrix"></textarea>
+        <p class="size-field" id="labeledDataSize">Waiting for data...</p>
+        <textarea name="labeledData" id="labeledData" rows="10" cols="110" placeholder="Type, paste or upload your tab-separated data here as a matrix"></textarea>
+        <input type="file" name="labeledTsv" id="labeledTsv" value="Upload labeled TSV">
+      </div>
       </div>
 
     </form>
@@ -53,7 +56,11 @@
 
     <h4>3. Compute results</h4>
       <p>Click the button to compute the results.</p>
-      <p><button id="computePercentages" class="compute">Compute Percentages</button></p>
+      <p>
+        <button id="computePercentages" class="compute">Compute Percentages</button>
+        <button id="downloadTsv" class="compute">Compute and Download</button>
+    </p>
+    </p>
         <textarea name="results" id="results" rows="10" cols="110" placeholder="Your results will appear here"></textarea>
 
      <h4>Important notes on data formatting</h4>
