@@ -45,7 +45,10 @@ def prepare_data_for_analysis(all_data_input):
         # If the line is a whitespace error from excel ignore it
         if line.isspace():
             continue
-        #strip line to deal with trailing commas
+        # Be fine with commas...
+        line = line.replace(',', '\t')
+
+        # Strip any trailing anythings
         strip_line = line.strip('\t')
         
         data_line = []
@@ -67,6 +70,7 @@ def prepare_unlabeled_for_analysis(user_unlabeled_data):
     lines = user_unlabeled_data.strip('\n').split('\n')
     stripped_lines = []
     for line in lines:
+        line = line.replace(',', '\t')
         stripped_lines.append(line.strip('\t').split('\t'))
 
     unlabeled = np.array(stripped_lines).astype(np.float)

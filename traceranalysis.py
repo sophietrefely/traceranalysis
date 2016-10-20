@@ -46,15 +46,16 @@ def do_tracer_analysis(data, unlabeled):
 def prepare_data_for_analysis(all_data_input):
     # Read in data file line by line
     data = []
+    all_data_input = all_data_input.replace(',', '\t')
     for line in all_data_input.split('\n'):
         # If the line is a whitespace error from excel ignore it
         if line.isspace():
             continue
         #strip line to deal with trailing commas
-        strip_line = line.rstrip(',')
+        strip_line = line.rstrip('\t')
         
         data_line = []
-        for str_float in strip_line.split(','):
+        for str_float in strip_line.split('\t'):
             if not str_float.isspace():
                 data_line.append(float(str_float))
         data.append(data_line)

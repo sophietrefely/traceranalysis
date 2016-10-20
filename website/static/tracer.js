@@ -40,20 +40,26 @@ $(document).ready(function() {
         doTracerAnalysis();
     }
 
+    function rowsToFormat(rows, delimiter) {
+        var lines = []
+        rows.forEach(function(row) {
+            lines.push(row.join(delimiter));
+        });
+        return lines.join('\n')
+    }
+
     function doTracerAnalysis(callback) {
         formData = $('#tracerForm').serialize()
         $.post('/api/tracer', formData).done(function(data) {
             try {
                 var arrays = JSON.parse(data);
-                var lines = []
-                arrays.forEach(function(row) {
-                    lines.push(row.join('\t'));
-                });
 
-                var result = lines.join('\n');
+                var result = rowsToFormat(arrays, '\t');
                 $('#results').val(result);
+
+                // Use CSV result for saving files
                 if (callback) {
-                    callback(lines.join(result));
+                    callback(arrays);
                 }
             }
             catch (err) {
@@ -66,13 +72,15 @@ $(document).ready(function() {
     }
 
     function downloadResultTsv() {
-        function cb(results) {
+        function cb(resultMatrix) {
+            var tsvFormatted = rowsToFormat(resultMatrix, ',')
+
             var downloadLink = document.createElement("a");
             downloadLink.style.width = 0;
-            var blob = new Blob([results]);
+            var blob = new Blob([tsvFormatted]);
             var url = URL.createObjectURL(blob);
             downloadLink.href = url;
-            downloadLink.download = "result.tsv";
+            downloadLink.download = "result.csv";
             document.body.appendChild(downloadLink);
             downloadLink.click();
             document.body.removeChild(downloadLink);
@@ -87,11 +95,17 @@ $(document).ready(function() {
         var rows = data.split('\n');
 
         var numberOfColumns = null;
-        rows.forEach(function(row, index) {
+        for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+            var row = rows[rowIndex];
+
             // Trim any trailing tabs or other whitespace
             row = row.trim();
 
+            // Replace ',' with '\t' to make CSV compatible
+            row = row.replace(/,/g, '\t')
+
             // Split row to get the length and to check column consistency
+            
             var rowSplit = row.split('\t');
             var length = rowSplit.length;
 
@@ -99,34 +113,20 @@ $(document).ready(function() {
                 var elem = rowSplit[colIndex];
                 if (!isNumber(elem.trim())) {
                     var where = {
-                        row: index + 1,
+                        row: rowIndex + 1,
                         column: colIndex + 1
                     }
+                    console.log('Bad data', elem);
                     alertNonNumericData(where);
-                    return {
-                        rows: 0, columns: 0 
-                    };
                     //throw 'Failed to parse data (non-numeric)';
                 }
             }
-            /*
-            rowSplit.forEach(function(elem, colIndex) {
-                if (elem.match(/[a-z]/i)) {
-                    var where = {
-                        row: index + 1,
-                        column: colIndex + 1
-                    }
-                    alertNonNumericData(where);
-                    throw 'Failed to parse data (non-numeric)';
-                }
-            })
-            */
 
             // If numberOfColumns is defined, we have already seen a row length
             // Check it is the same as the one before with compound if statement
             if (numberOfColumns && numberOfColumns !== length) {
                 var where = {
-                    row: index + 1,
+                    row: rowIndex + 1,
                     column: length + 1
                 };
                 knownBadData(where);
@@ -135,7 +135,7 @@ $(document).ready(function() {
 
             // Assign to numberOfColumns so we can check consistency as we go
             numberOfColumns = length;
-        })
+        }
 
         return {
             rows: rows.length,
