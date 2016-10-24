@@ -31,6 +31,9 @@
             <li>Paste in NUMERICAL VALUES ONLY.</li>
             <li>Do not paste in the column and row headers.</li>
         </ul>
+
+        <p>OR upload your data as a CSV file in the same format.<p>
+
          <p class="size-field" id="unlabeledDataSize">Waiting for data...</p>
         <textarea name="unlabeledData" id="unlabeledData" rows="10" cols="110" placeholder="Type, paste, or upload your unlabeled data here as tab-separated values"></textarea>
         <input type="file" name="unlabeledTsv" id="unlabeledTsv" value="Upload unlabeled TSV">
@@ -40,11 +43,13 @@
          
 
       <div class="data">
-        <p>Copy the data for your chosen metabolite from your spreadsheet and paste into the box below.</p>
+        <p>Copy the data for your chosen metabolite from your spreadsheet and paste into the box below OR upload your data as a CSV file.</p>
+
         <ul>
             <li>Use the same format as you did for unlabeled data</li>
             <li>Make sure the number of columns is consistent with the unlabeled data</li>
         </ul>
+        
         <p class="size-field" id="labeledDataSize">Waiting for data...</p>
         <textarea name="labeledData" id="labeledData" rows="10" cols="110" placeholder="Type, paste or upload your tab-separated data here as a matrix"></textarea>
         <input type="file" name="labeledTsv" id="labeledTsv" value="Upload labeled TSV">
@@ -66,7 +71,7 @@
      <h4>Important notes on data formatting</h4>
      <p>Data should be organised into separate columns for each isotopologue measured and separate rows for each replicate sample.</p>
 
-  <p>The unlabeled data is used for normalisation. It is recommended that you normalise to control data from samples that did not contain an isotope label. If you do not have unlabeled data, you can use theoretical isotopologue distribution values for normalisation. These values can be derived for specific metabolites using software tools such as XcaliburQuan (Thermo).<p>
+  <p>The unlabeled data is used for normalisation. It is recommended that you normalise to control data from samples that did not contain an isotope label. If you do not have unlabeled data, you can use theoretical isotopologue distribution values for normalisation. These values can be derived for specific metabolites using software tools such as <a href="http://www.chemcalc.org/">ChemCalc</a> or XcaliburQuan (Thermo).<p>
 
   </body>
 
